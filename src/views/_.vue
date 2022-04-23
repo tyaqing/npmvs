@@ -30,7 +30,7 @@
   </GlobalLayout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { message, Tooltip } from "ant-design-vue";
 import {
   SearchOutlined,
@@ -39,62 +39,50 @@ import {
 } from "@ant-design/icons-vue";
 import html2canvas from "html2canvas";
 import copy from "@/utils/clipboard";
-import { defineComponent } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import GlobalLayout from "@/components/GlobalLayout.vue";
 import PackageTags from "@/components/PackageTags.vue";
 import DownloadGraph from "@/components/DownloadGraph.vue";
 import InfoTable from "@/components/InfoTable.vue";
-export default defineComponent({
-  components: {
-    Tooltip,
-    SearchOutlined,
-    CameraFilled,
-    GlobalLayout,
-    PackageTags,
-    DownloadGraph,
-    InfoTable,
-    LinkOutlined,
-  },
-  name: "PackagesVs",
-  setup() {
-    const route = useRoute();
-    const selectedPkg = route.path.substring(1).split("-vs-");
-    const title = selectedPkg.join(" vs ");
-    // 下载报告截图
-    const downloadReportImage = () => {
-      const target = document.getElementById("infoPicture");
-      if (target) {
-        html2canvas(target, {
-          backgroundColor: null,
-        }).then(function (canvas: any) {
-          let link = document.createElement("a");
-          link.href = canvas.toDataURL(); //下载链接
-          link.setAttribute("download", `${title}.png`);
-          link.style.display = "none"; //a标签隐藏
-          document.body.appendChild(link);
-          link.click();
-          message.success("下载成功");
-        });
-      }
-    };
-    const copyLink = () => {
-      copy(location.href);
-    };
+const route = useRoute();
+const selectedPkg = ref<string[]>([]);
+const title = ref<string>("npmvs");
 
-    return {
-      selectedPkg,
-      title,
-      downloadReportImage,
-      copyLink,
-    };
-  },
-  head: {
-    titleTemplate() {
-      return (
-        this.$route.path.substring(1).split("-vs-").join(" vs ") + " | npmvs"
-      );
-    },
-  },
+onMounted(() => {
+  init();
 });
+watch(
+  () => route.path,
+  () => {
+    init();
+  }
+);
+const init = () => {
+  // 判断vs
+  selectedPkg.value = route.path.substring(1).split("-vs-");
+  nextTick(() => {
+    title.value = document.title = selectedPkg.value.join(" vs ");
+  });
+};
+// 下载报告截图
+const downloadReportImage = () => {
+  const target = document.getElementById("infoPicture");
+  if (target) {
+    html2canvas(target, {
+      backgroundColor: null,
+    }).then(function (canvas: any) {
+      let link = document.createElement("a");
+      link.href = canvas.toDataURL(); //下载链接
+      link.setAttribute("download", `${document.title}.png`);
+      link.style.display = "none"; //a标签隐藏
+      document.body.appendChild(link);
+      link.click();
+      message.success("下载成功");
+    });
+  }
+};
+const copyLink = () => {
+  copy(location.href);
+};
 </script>
