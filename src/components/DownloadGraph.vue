@@ -24,6 +24,7 @@ export default defineComponent({
       default: [],
     },
   },
+  // eslint-disable-next-line vue/no-setup-props-destructure
   setup({ selectedPkg }) {
     let line: any;
     const downloadsData = ref<DataItemType[]>([]);

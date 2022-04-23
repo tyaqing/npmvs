@@ -17,65 +17,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-#__layout {
-  height: 100%;
-}
-
-// Table
-@table-header-bg: #fff;
-@table-row-hover-bg: rgba(0, 0, 0, 0.04);
-
 .ant-table {
-  &-column-title {
-    font-weight: 600;
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.88);
-  }
 
-  &-filter-icon {
-    position: relative !important;
-    background: #FFF !important;
-  }
-
-  &-thead {
-    height: 64px;
-
-    tr > th {
-      border: none;
-
-      &:first-of-type {
-        padding-left: 0;
-      }
-
-      &:last-of-type {
-        padding-right: 0;
-      }
-    }
-  }
-
-  &-tbody > tr > td {
-    font-size: 16px;
-    color: rgba(0, 0, 0, 0.88);
-    //border: none;
-    &:first-of-type {
-      padding-left: 0;
-      border-radius: 4px 0 0 4px;
-    }
-
-    &:last-of-type {
-      padding-right: 0;
-      border-radius: 0 4px 4px 0;
-    }
-  }
-
-  &-placeholder {
-    //border: none;
-  }
 }
 
 
 // Select
 .ant-input {
   height: 38px;
-@apply rounded-2;
+  @apply rounded-2;
 }

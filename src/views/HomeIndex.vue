@@ -12,7 +12,7 @@
         v-for="(item, index) of npmHots"
         :key="index"
       >
-        <router-link class="text-base" :to="genNav(item)">
+        <router-link class="text-base" :to="tags2query(item)">
           <span v-for="(pkg, index) of item" :key="pkg">
             {{ index === 0 ? "" : " vs" }}
             <span class="font-bold">{{ pkg }}</span>
@@ -23,44 +23,26 @@
   </GlobalLayout>
 </template>
 
-<script lang="ts">
-import { getCount, NpmHot } from "@/composables/fetch";
-import SearchInput from "@/components/search-input.vue";
+<script lang="ts" setup>
+import SearchInput from "@/components/SearchInput.vue";
 import GlobalLayout from "@/components/GlobalLayout.vue";
-import { random } from "lodash-es";
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
+import { tags2query } from "@/utils/string";
+import { proxyWrap } from "@/utils/request";
 import axios from "axios";
-export default defineComponent({
-  components: { SearchInput, GlobalLayout },
-  setup() {
-    const npmHots = ref([]);
 
-    const init = async () => {
-      const total = await getCount();
-      const skip = random(0, total - 5);
-      console.log(skip);
-      const { data } = await axios({
-        url: `${process.env.VUE_APP_CMS_API}/api/v1.0/npm-hot`,
-        method: "get",
-        params: {
-          skip,
-          limit: 5,
-          fields: {
-            content: 1,
-          },
-        },
-      });
-      npmHots.value = data.data.map((item: NpmHot) => item.content.split(" "));
-    };
-    init();
-
-    const genNav = (val: string[]) => {
-      return val.join("-vs-");
-    };
-    return {
-      genNav,
-      npmHots,
-    };
-  },
-});
+const npmHots = ref([]);
+const init = async () => {
+  const { data } = await axios.get(
+    `${process.env.VUE_APP_ABFREE_API}/npmhots`,
+    {
+      data: {
+        d: 1,
+      },
+    }
+  );
+  console.log(data);
+  npmHots.value = data.map((item: string) => item.split(" "));
+};
+init();
 </script>
