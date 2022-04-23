@@ -5,7 +5,7 @@
       输入需要比较的npm包名
     </div>
     <div class="w-670px <lg:w-full mx-auto">
-      <SearchInput class="mx-auto w-full justify-center" />
+      <SearchInput :selectedPkg="[]" class="mx-auto w-full justify-center" />
       <div class="text-lg font-bold my-5">热门VS</div>
       <div
         class="first:mt-0 mt-2"
@@ -28,7 +28,6 @@ import SearchInput from "@/components/SearchInput.vue";
 import GlobalLayout from "@/components/GlobalLayout.vue";
 import { ref } from "vue";
 import { tags2query } from "@/utils/string";
-import { proxyWrap } from "@/utils/request";
 import axios from "axios";
 
 const npmHots = ref([]);
@@ -41,7 +40,6 @@ const init = async () => {
       },
     }
   );
-  console.log(data);
   npmHots.value = data.map((item: string) => item.split(" "));
 };
 init();
