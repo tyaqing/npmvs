@@ -9,7 +9,14 @@ import { Line } from "@antv/g2plot";
 import { thousand } from "@/utils/number";
 import { proxyWrap, request } from "@/utils/request";
 import dayjs from "dayjs";
-import { nextTick, onMounted, ref, watch } from "vue";
+import {
+  nextTick,
+  onDeactivated,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+} from "vue";
 import { color } from "@/utils/color";
 import { useGlobalStore } from "@/store";
 import { Spin } from "ant-design-vue";
@@ -95,6 +102,10 @@ onMounted(() => {
       color,
     });
   });
+});
+
+onUnmounted(() => {
+  line.destroy();
 });
 
 //
