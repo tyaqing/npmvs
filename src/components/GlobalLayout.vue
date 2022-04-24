@@ -18,37 +18,21 @@
     </div>
     <div class="text-center py-30px">
       <a href="https://abfree.com" target="_blank">ABFree</a>
-      | Npm VS | v0.9-beta
+      | Npm VS | v1.0
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/zh-cn";
 
 import { Tag } from "ant-design-vue";
-import { useRoute, useRouter } from "vue-router";
-import { defineComponent } from "vue";
+import { useRoute } from "vue-router";
 
 dayjs.locale("zh-cn"); // 全局使用简体中文
 dayjs.extend(relativeTime);
-
-export default defineComponent({
-  components: { Tag },
-  setup() {
-    const router = useRouter();
-    const route = useRoute();
-
-    const isHomePage = route.path === "/";
-    const toHome = () => {
-      router.push("/");
-    };
-    return {
-      toHome,
-      isHomePage,
-    };
-  },
-});
+const route = useRoute();
+const isHomePage = route.path === "/";
 </script>

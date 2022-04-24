@@ -15,20 +15,19 @@
       ]"
     >
       <span class="font-bold">{{ item }}</span>
-      <CloseCircleFilled
-        v-if="!globalStore.errorPkg.includes(item)"
-        class="ml-2 h-20px w-20px text-gray-3 hover:text-gray-2 transition text-20px"
-        @mousedown.stop="remove(item)"
-      />
-      <Popover placement="bottom" v-else>
+      <Popover placement="bottom" v-if="globalStore.errorPkg.includes(item)">
         <FrownFilled
           class="ml-2 h-20px w-20px text-red-3 hover:text-red-2 transition text-20px"
           @mousedown.stop="remove(item)"
         />
         <template #content>
-          <span>无法确认存在该库,可点击删除</span>
+          <span>无法确认存在该库,可点击删除,或刷新重试</span>
         </template>
       </Popover>
+      <CloseCircleFilled
+        class="ml-2 h-20px w-20px text-gray-3 hover:text-gray-2 transition text-20px"
+        @mousedown.stop="remove(item)"
+      />
     </div>
     <div
       :key="item"
