@@ -80,7 +80,6 @@ onMounted(async () => {
 const remove = (val: string) => {
   const newSelectedPkg = globalStore.selectedPkg.filter((item) => item !== val);
   const path = newSelectedPkg.join("-vs-");
-  console.log(path);
   router.push("/" + path);
 };
 const add = (val: string) => {

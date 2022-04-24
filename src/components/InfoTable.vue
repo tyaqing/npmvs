@@ -90,12 +90,11 @@
 <script lang="ts" setup>
 import { Table, Tooltip } from "ant-design-vue";
 import { GithubFilled, CompassOutlined } from "@ant-design/icons-vue";
-import { proxyWrap } from "@/utils/request";
+import { proxyWrap, request } from "@/utils/request";
 import dayjs from "dayjs";
 import { thousand } from "@/utils/number";
 import { color } from "@/utils/color";
 import { ref, watch } from "vue";
-import axios from "axios";
 import { useGlobalStore } from "@/store";
 import { useSpinning } from "@/composables";
 
@@ -145,14 +144,14 @@ watch(
 );
 async function getNpmInfo(val: string) {
   // 获取npm基本信息
-  const { data } = await axios.get(
+  const { data } = await request.get(
     proxyWrap("https://api.npms.io/v2/package/" + encodeURIComponent(val))
   );
   return data;
 }
 const getGithubInfo = async (val: string) => {
   // 获取npm基本信息
-  const { data } = await axios.get(
+  const { data } = await request.get(
     proxyWrap("https://api.github.com/repos/" + val)
   );
   return data;

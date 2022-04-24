@@ -68,8 +68,10 @@ watch(
 );
 const init = () => {
   // 判断vs
-  selectedPkg.value = route.path.substring(1).split("-vs-");
-  globlaStore.selectedPkg = selectedPkg.value;
+  if (route.path.substring(1)) {
+    selectedPkg.value = route.path.substring(1).split("-vs-");
+    globlaStore.selectedPkg = selectedPkg.value;
+  }
   nextTick(() => {
     title.value = selectedPkg.value.join(" vs ");
     title.value.length && (document.title = title.value + " | npmvs");

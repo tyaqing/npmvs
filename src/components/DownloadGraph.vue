@@ -7,8 +7,7 @@
 <script lang="ts" setup>
 import { Line } from "@antv/g2plot";
 import { thousand } from "@/utils/number";
-import axios from "axios";
-import { proxyWrap } from "@/utils/request";
+import { proxyWrap, request } from "@/utils/request";
 import dayjs from "dayjs";
 import { nextTick, ref, watch } from "vue";
 import { color } from "@/utils/color";
@@ -34,8 +33,7 @@ watch(downloadsData, () => {
 //
 const fetchData = async (val: string) => {
   showSpinning();
-  // TODO 请求错误兜底
-  const { data } = await axios.get(
+  const { data } = await request.get(
     proxyWrap(
       `https://api.npmjs.org/downloads/range/${dayjs()
         .add(-6, "year")
@@ -135,7 +133,7 @@ nextTick(() => {
     },
     smooth: true,
     lineStyle: {
-      lineWidth: 4,
+      lineWidth: 3,
     },
     tooltip: {
       domStyles: {

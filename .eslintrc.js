@@ -21,6 +21,7 @@ module.exports = {
     //     varsIgnorePattern: "^_",
     //   },
     // ],
+    "@typescript-eslint/no-explicit-any": "off",
     "vue/no-unused-vars": [
       "error",
       {
