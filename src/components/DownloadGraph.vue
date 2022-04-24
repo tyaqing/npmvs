@@ -70,12 +70,15 @@ const init = async () => {
   });
   const resArr = await Promise.allSettled(p);
   // 寻找查询失败
-  globalStore.errorPkg = resArr
+  const errorPkg = resArr
     .map((item, index) => {
       if (item.status === "rejected") return index;
     })
-    .filter((item) => item)
-    .map((index) => (index ? globalStore.selectedPkg[index] : ""));
+    .filter((item) => item !== undefined)
+    .map((index) =>
+      index !== undefined ? globalStore.selectedPkg[index] : ""
+    );
+  globalStore.errorPkg = [...errorPkg, ...globalStore.errorPkg];
   downloadsData.value = resArr
     .filter((item) => {
       return item.status === "fulfilled";

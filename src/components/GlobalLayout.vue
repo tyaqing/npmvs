@@ -18,7 +18,7 @@
     </div>
     <div class="text-center py-30px">
       <a href="https://abfree.com" target="_blank">ABFree</a>
-      | Npm VS | v0.9-beta
+      | Npm VS | v1.0
     </div>
   </div>
 </template>
