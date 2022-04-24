@@ -12,7 +12,7 @@
         v-for="(item, index) of npmHots"
         :key="index"
       >
-        <router-link class="text-base" :to="tags2query(item)">
+        <router-link class="text-base" :to="'/' + tags2query(item)">
           <span v-for="(pkg, index) of item" :key="pkg">
             {{ index === 0 ? "" : " vs" }}
             <span class="font-bold">{{ pkg }}</span>
@@ -26,11 +26,14 @@
 <script lang="ts" setup>
 import SearchInput from "@/components/SearchInput.vue";
 import GlobalLayout from "@/components/GlobalLayout.vue";
-import { ref } from "vue";
+import { onActivated, onMounted, ref } from "vue";
 import { tags2query } from "@/utils/string";
 import axios from "axios";
 
 const npmHots = ref([]);
+onMounted(() => {
+  document.title = "npmvs";
+});
 const init = async () => {
   const { data } = await axios.get(
     `${process.env.VUE_APP_ABFREE_API}/npmhots`,

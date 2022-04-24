@@ -25,7 +25,7 @@ export type DataItemType = {
 const globalStore = useGlobalStore();
 const { spinning, showSpinning, hideSpinning } = useSpinning();
 
-let line: any;
+let line: Line;
 
 const downloadsData = ref<DataItemType[]>([]);
 watch(downloadsData, () => {
@@ -47,10 +47,9 @@ const fetchData = async (val: string) => {
   // 获取本日星期
   const weekOfToday = dayjs().day();
   const newList: DataItemType[] = [];
-  downloadDataList.forEach((item: any) => {
+  downloadDataList.forEach((item: DataItemType) => {
     // eslint-disable-next-line prefer-const
     let { day, downloads } = item;
-
     if (dayjs(day).day() === weekOfToday) {
       downloads += cun;
       const record = {
@@ -60,17 +59,29 @@ const fetchData = async (val: string) => {
       };
       cun = 0;
       newList.push(record);
-    } else cun += downloads;
+    } else cun += +downloads;
   });
   return newList;
 };
 const init = async () => {
-  const p: any[] = [];
+  const p: Promise<DataItemType[]>[] = [];
   globalStore.selectedPkg.forEach((pkg) => {
     p.push(fetchData(pkg));
   });
-  const resArr = await Promise.all(p);
-  downloadsData.value = resArr.flat(1);
+  const resArr = await Promise.allSettled(p);
+  // 寻找查询失败
+  globalStore.errorPkg = resArr
+    .map((item, index) => {
+      if (item.status === "rejected") return index;
+    })
+    .filter((item) => item)
+    .map((index) => (index ? globalStore.selectedPkg[index] : ""));
+  downloadsData.value = resArr
+    .filter((item) => {
+      return item.status === "fulfilled";
+    })
+    .map((item: any) => item.value)
+    .flat(1);
 };
 watch(
   () => globalStore.selectedPkg,
@@ -134,10 +145,9 @@ nextTick(() => {
         },
       },
       customItems: (originalItems) => {
-        const n = originalItems.sort((a, b) => {
+        return originalItems.sort((a, b) => {
           return Number(b.value) - Number(a.value);
         });
-        return n;
       },
     },
     color,

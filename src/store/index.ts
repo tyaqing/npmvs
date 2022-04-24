@@ -2,11 +2,12 @@ import { defineStore } from "pinia";
 
 interface IUserState {
   selectedPkg: string[];
+  errorPkg: string[];
 }
 
 export const useGlobalStore = defineStore("global", {
   state: (): IUserState => {
-    return { selectedPkg: [] };
+    return { selectedPkg: [], errorPkg: [] };
   },
   // could also be defined as
   // state: () => ({ count: 0 })

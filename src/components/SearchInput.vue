@@ -31,9 +31,6 @@ import { useSpinning } from "@/composables";
 
 const { spinning, hideSpinning, showSpinning } = useSpinning();
 
-const CancelToken = axios.CancelToken;
-const source = CancelToken.source();
-
 type SearchResultItem = {
   name: string;
   description: string;
@@ -47,6 +44,8 @@ const props = withDefaults(defineProps<Props>(), {
   selectedPkg: () => [],
 });
 
+let cancelToken: any;
+
 const optional = ref<SearchResultItem[]>([]);
 const router = useRouter();
 const searchKey = ref<string>("");
@@ -57,30 +56,38 @@ const handleSearch = debounce(
       optional.value = [];
       return;
     }
-    // TODO 时序问题仍然有bug
-    source.cancel();
+    if (typeof cancelToken != typeof undefined) {
+      cancelToken.cancel("cancel request");
+    }
+    cancelToken = axios.CancelToken.source();
     // controller.abort();
     // 获取选项
     showSpinning();
-    const { data } = await axios.get(
-      proxyWrap(
-        `https://api.npms.io/v2/search/suggestions?q=${searchKey.value}&size=5`
-      ),
-      {}
-    );
+    try {
+      const { data } = await axios.get(
+        proxyWrap(
+          `https://api.npms.io/v2/search/suggestions?q=${searchKey.value}&size=5`
+        ),
+        {
+          cancelToken: cancelToken.token,
+        }
+      );
+      optional.value = [
+        ...data.map((item: { package: SearchResultItem }) => {
+          const { name, description } = item.package;
+          return {
+            name,
+            value: name,
+            description,
+          };
+        }),
+      ];
+    } catch (e) {
+      // no
+    }
     hideSpinning();
-    optional.value = [
-      ...data.map((item: { package: SearchResultItem }) => {
-        const { name, description } = item.package;
-        return {
-          name,
-          value: name,
-          description,
-        };
-      }),
-    ];
   },
-  300,
+  80,
   {
     leading: true,
   }

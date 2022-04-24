@@ -16,10 +16,19 @@
     >
       <span class="font-bold">{{ item }}</span>
       <CloseCircleFilled
+        v-if="!globalStore.errorPkg.includes(item)"
         class="ml-2 h-20px w-20px text-gray-3 hover:text-gray-2 transition text-20px"
-        type="close-circle"
         @mousedown.stop="remove(item)"
       />
+      <Popover placement="bottom" v-else>
+        <FrownFilled
+          class="ml-2 h-20px w-20px text-red-3 hover:text-red-2 transition text-20px"
+          @mousedown.stop="remove(item)"
+        />
+        <template #content>
+          <span>无法确认存在该库,可点击删除</span>
+        </template>
+      </Popover>
     </div>
     <div
       :key="item"
@@ -40,7 +49,11 @@
 </template>
 
 <script lang="ts" setup>
-import { CloseCircleFilled, PlusOutlined } from "@ant-design/icons-vue";
+import {
+  CloseCircleFilled,
+  PlusOutlined,
+  FrownFilled,
+} from "@ant-design/icons-vue";
 import { color } from "@/utils/color";
 import { getRelated } from "@/composables/fetch";
 import { onMounted, ref, watch } from "vue";
@@ -48,6 +61,7 @@ import { useRouter } from "vue-router";
 import SearchInput from "@/components/SearchInput.vue";
 import { without } from "lodash-es";
 import { useGlobalStore } from "@/store";
+import { Popover } from "ant-design-vue";
 
 const globalStore = useGlobalStore();
 

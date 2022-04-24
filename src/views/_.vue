@@ -72,7 +72,7 @@ const init = () => {
   globlaStore.selectedPkg = selectedPkg.value;
   nextTick(() => {
     title.value = selectedPkg.value.join(" vs ");
-    document.title = title.value + " | npmvs";
+    title.value.length && (document.title = title.value + " | npmvs");
   });
 };
 // 下载报告截图
