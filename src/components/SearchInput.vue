@@ -24,7 +24,7 @@ import { Input, AutoComplete } from "ant-design-vue";
 import { SearchOutlined, LoadingOutlined } from "@ant-design/icons-vue";
 import { debounce } from "lodash-es";
 import axios from "axios";
-import { proxyWrap } from "@/utils/request";
+import { request, proxyWrap } from "@/utils/request";
 import { ref, watch, defineProps, withDefaults } from "vue";
 import { useRouter } from "vue-router";
 import { useSpinning } from "@/composables";
@@ -64,14 +64,13 @@ const handleSearch = debounce(
     // 获取选项
     showSpinning();
     try {
-      const { data } = await axios.get(
-        proxyWrap(
+      const { data } = await request({
+        url: proxyWrap(
           `https://api.npms.io/v2/search/suggestions?q=${searchKey.value}&size=5`
         ),
-        {
-          cancelToken: cancelToken.token,
-        }
-      );
+        method: "GET",
+        cancelToken: cancelToken.token,
+      });
       optional.value = [
         ...data.map((item: { package: SearchResultItem }) => {
           const { name, description } = item.package;

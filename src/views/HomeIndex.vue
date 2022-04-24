@@ -26,22 +26,17 @@
 <script lang="ts" setup>
 import SearchInput from "@/components/SearchInput.vue";
 import GlobalLayout from "@/components/GlobalLayout.vue";
-import { onActivated, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { tags2query } from "@/utils/string";
-import axios from "axios";
+import { request } from "@/utils/request";
 
 const npmHots = ref([]);
 onMounted(() => {
   document.title = "npmvs";
 });
 const init = async () => {
-  const { data } = await axios.get(
-    `${process.env.VUE_APP_ABFREE_API}/npmhots`,
-    {
-      data: {
-        d: 1,
-      },
-    }
+  const { data } = await request.get(
+    `${process.env.VUE_APP_ABFREE_API}/npmhots`
   );
   npmHots.value = data.map((item: string) => item.split(" "));
 };
