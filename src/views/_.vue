@@ -8,7 +8,13 @@
 
     <div id="infoPicture" class="bg-white p-10 rounded-3 mt-5 border shadow">
       <div class="flex items-center">
-        <h1 class="text-2xl m-0 flex-1 truncate">{{ title }}下载趋势</h1>
+        <h1 class="text-2xl m-0 flex-1 truncate text-gray-1">
+          <span :key="i" v-for="(i, index) of selectedPkg">
+            <span class="text-gray-2">{{ index === 0 ? "" : " vs " }}</span>
+            <span class="font-bold text-gray-1">{{ i }}</span>
+          </span>
+          下载趋势
+        </h1>
         <Tooltip class="mr-4">
           <template v-slot:title>复制链接</template>
           <LinkOutlined
@@ -45,10 +51,12 @@ import GlobalLayout from "@/components/GlobalLayout.vue";
 import PackageTags from "@/components/PackageTags.vue";
 import DownloadGraph from "@/components/DownloadGraph.vue";
 import InfoTable from "@/components/InfoTable.vue";
+import { useGlobalStore } from "@/store";
 const route = useRoute();
 const selectedPkg = ref<string[]>([]);
 const title = ref<string>("npmvs");
 
+const globlaStore = useGlobalStore();
 onMounted(() => {
   init();
 });
@@ -61,8 +69,10 @@ watch(
 const init = () => {
   // 判断vs
   selectedPkg.value = route.path.substring(1).split("-vs-");
+  globlaStore.selectedPkg = selectedPkg.value;
   nextTick(() => {
-    title.value = document.title = selectedPkg.value.join(" vs ");
+    title.value = selectedPkg.value.join(" vs ");
+    document.title = title.value + " | npmvs";
   });
 };
 // 下载报告截图

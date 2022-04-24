@@ -1,41 +1,27 @@
 <template>
-  <Dropdown class="shadow rounded-2 h-38px" :visible="dropdownVisible">
-    <Input
-      size="large"
-      v-model:value="searchKey"
-      @focus="searchKey !== '' && showDropdown()"
-      @blur="hideDropdown"
-    >
+  <AutoComplete
+    v-model:value="searchKey"
+    :dropdownMatchSelectWidth="670"
+    :options="optional"
+    :backfill="true"
+    @select="handleChange"
+  >
+    <Input class="shadow rounded-2" size="large" v-model:value="searchKey">
       <template #suffix>
-        <search-outlined />
+        <LoadingOutlined v-if="spinning"></LoadingOutlined>
+        <search-outlined v-else />
       </template>
     </Input>
-    <template #overlay>
-      <Menu class="w-670px rounded-2">
-        <MenuList v-if="!optional.length && !spinning">
-          <Empty class="text-gray-2 text-center" />
-        </MenuList>
-        <MenuList
-          @mousedown="handleChange(d.name)"
-          v-for="d in optional"
-          :key="d.name"
-        >
-          <div class="text-base font-bold">{{ d.name }}</div>
-          <div class="text-gray-2">{{ d.description }}</div>
-        </MenuList>
-        <MenuList v-if="spinning">
-          <Spin>
-            <div class="h-32px"></div>
-          </Spin>
-        </MenuList>
-      </Menu>
-    </template>
-  </Dropdown>
+    <template #option="{ name, description }">
+      <div class="text-base font-bold">{{ name }}</div>
+      <div class="text-gray-2">{{ description }}</div></template
+    >
+  </AutoComplete>
 </template>
 
 <script lang="ts" setup>
-import { Dropdown, Input, Menu, Spin, Empty } from "ant-design-vue";
-import { SearchOutlined } from "@ant-design/icons-vue";
+import { Input, AutoComplete } from "ant-design-vue";
+import { SearchOutlined, LoadingOutlined } from "@ant-design/icons-vue";
 import { debounce } from "lodash-es";
 import axios from "axios";
 import { proxyWrap } from "@/utils/request";
@@ -48,7 +34,6 @@ const { spinning, hideSpinning, showSpinning } = useSpinning();
 const CancelToken = axios.CancelToken;
 const source = CancelToken.source();
 
-const MenuList = Menu.Item;
 type SearchResultItem = {
   name: string;
   description: string;
@@ -64,16 +49,15 @@ const props = withDefaults(defineProps<Props>(), {
 
 const optional = ref<SearchResultItem[]>([]);
 const router = useRouter();
-const dropdownVisible = ref<boolean>(false);
 const searchKey = ref<string>("");
 const handleSearch = debounce(
   async () => {
     // 校验
     if (searchKey.value.length === 0) {
-      dropdownVisible.value = false;
       optional.value = [];
       return;
     }
+    // TODO 时序问题仍然有bug
     source.cancel();
     // controller.abort();
     // 获取选项
@@ -90,6 +74,7 @@ const handleSearch = debounce(
         const { name, description } = item.package;
         return {
           name,
+          value: name,
           description,
         };
       }),
@@ -103,18 +88,12 @@ const handleSearch = debounce(
 
 watch(searchKey, () => {
   searchKey.value = searchKey.value.replace(/[^a-zA-Z0-9-_]/g, "");
-  showDropdown();
   handleSearch();
 });
 
-const hideDropdown = () => {
-  dropdownVisible.value = false;
-};
-const showDropdown = () => {
-  dropdownVisible.value = true;
-};
 // 添加了对比包
 const handleChange = (key: string) => {
+  searchKey.value = "";
   if (props.selectedPkg.includes(key)) return;
   const path = [...props.selectedPkg, key].join("-vs-");
   router.push("/" + path);
