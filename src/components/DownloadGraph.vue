@@ -9,7 +9,7 @@ import { Line } from "@antv/g2plot";
 import { thousand } from "@/utils/number";
 import { proxyWrap, request } from "@/utils/request";
 import dayjs from "dayjs";
-import { nextTick, ref, watch } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import { color } from "@/utils/color";
 import { useGlobalStore } from "@/store";
 import { Spin } from "ant-design-vue";
@@ -30,6 +30,73 @@ const downloadsData = ref<DataItemType[]>([]);
 watch(downloadsData, () => {
   render();
 });
+
+onMounted(() => {
+  nextTick(() => {
+    line = new Line("container", {
+      data: [],
+      seriesField: "package",
+      xField: "day",
+      yField: "downloads",
+      yAxis: {
+        label: {
+          // 数值格式化为千分位
+          formatter: thousand,
+        },
+      },
+      legend: {
+        itemName: {
+          style: {
+            fontSize: 16, // 字号
+            fill: "black", // 字体颜色
+            opacity: 0.8, // 字体透明度
+          },
+        },
+        itemSpacing: 2,
+        marker: {
+          symbol: "circle",
+        },
+        position: "top",
+        flipPage: false,
+      },
+      xAxis: {
+        tickCount: 12,
+        grid: {
+          line: {
+            style: {
+              stroke: "#eee",
+              lineDash: [4, 2],
+            },
+          },
+          alternateColor: "rgba(0,0,0,0.01)",
+        },
+        nice: true,
+      },
+      smooth: true,
+      lineStyle: {
+        lineWidth: 3,
+      },
+      tooltip: {
+        domStyles: {
+          "g2-tooltip-title": {
+            fontSize: "14px",
+            fontWeight: "bold",
+          },
+          "g2-tooltip-list-item": {
+            fontSize: "14px",
+          },
+        },
+        customItems: (originalItems) => {
+          return originalItems.sort((a, b) => {
+            return Number(b.value) - Number(a.value);
+          });
+        },
+      },
+      color,
+    });
+  });
+});
+
 //
 const fetchData = async (val: string) => {
   showSpinning();
@@ -91,69 +158,6 @@ watch(
   }
 );
 
-nextTick(() => {
-  line = new Line("container", {
-    data: [],
-    seriesField: "package",
-    xField: "day",
-    yField: "downloads",
-    yAxis: {
-      label: {
-        // 数值格式化为千分位
-        formatter: thousand,
-      },
-    },
-    legend: {
-      itemName: {
-        style: {
-          fontSize: 16, // 字号
-          fill: "black", // 字体颜色
-          opacity: 0.8, // 字体透明度
-        },
-      },
-      itemSpacing: 2,
-      marker: {
-        symbol: "circle",
-      },
-      position: "top",
-      flipPage: false,
-    },
-    xAxis: {
-      tickCount: 12,
-      grid: {
-        line: {
-          style: {
-            stroke: "#eee",
-            lineDash: [4, 2],
-          },
-        },
-        alternateColor: "rgba(0,0,0,0.01)",
-      },
-      nice: true,
-    },
-    smooth: true,
-    lineStyle: {
-      lineWidth: 3,
-    },
-    tooltip: {
-      domStyles: {
-        "g2-tooltip-title": {
-          fontSize: "14px",
-          fontWeight: "bold",
-        },
-        "g2-tooltip-list-item": {
-          fontSize: "14px",
-        },
-      },
-      customItems: (originalItems) => {
-        return originalItems.sort((a, b) => {
-          return Number(b.value) - Number(a.value);
-        });
-      },
-    },
-    color,
-  });
-});
 const render = () => {
   line.update({
     data: downloadsData.value,
