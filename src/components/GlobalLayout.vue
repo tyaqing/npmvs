@@ -9,8 +9,8 @@
       }"
     >
       <router-link to="/" class="text-4xl font-bold relative">
-        <img class="w-110px h-40px" src="@/assets/logo.png" alt="" />
-        <Tag color="cyan" class="absolute -right-55px -top-5px">beta</Tag>
+        <img class="w-60px h-60px" src="@/assets/logo.png" alt="" />
+        <!--        <Tag color="cyan" class="absolute -right-55px -top-5px">beta</Tag>-->
       </router-link>
     </header>
     <div class="flex-1">
