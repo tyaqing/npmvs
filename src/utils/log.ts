@@ -1,4 +1,3 @@
-import axios from "axios";
 import qs from "qs";
 
 interface IReportType {
@@ -24,7 +23,12 @@ export async function logReport(json: IReportType) {
     client_time: Date.now(),
     version: "prod",
   });
-  await axios.get(`${process.env.VUE_APP_ABFREE_API}/log?${query}`);
+  imgReport(`${process.env.VUE_APP_LOG_API}/log?${query}`);
+}
+
+export function imgReport(url: string) {
+  if (!url) return;
+  new Image().src = url;
 }
 
 // pv上报

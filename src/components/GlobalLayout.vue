@@ -28,7 +28,6 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/zh-cn";
 
-import { Tag } from "ant-design-vue";
 import { useRoute } from "vue-router";
 
 dayjs.locale("zh-cn"); // 全局使用简体中文

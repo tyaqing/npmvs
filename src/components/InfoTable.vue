@@ -89,7 +89,7 @@
 
 <script lang="ts" setup>
 import { Table, Tooltip } from "ant-design-vue";
-import { GithubFilled, CompassOutlined } from "@ant-design/icons-vue";
+import { CompassOutlined, GithubFilled } from "@ant-design/icons-vue";
 import { proxyWrap, request } from "@/utils/request";
 import dayjs from "dayjs";
 import { thousand } from "@/utils/number";
@@ -129,10 +129,9 @@ const init = async () => {
     .filter((item) => item)
     .map((index) => (index ? globalStore.selectedPkg[index] : ""));
   globalStore.errorPkg = [...errorPkg, ...globalStore.errorPkg];
-  const ddd = res
+  source.value = res
     .filter((item) => item.status === "fulfilled")
     .map((item: any) => item.value);
-  source.value = ddd;
 
   hideSpinning();
 };
