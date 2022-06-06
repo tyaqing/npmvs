@@ -42,5 +42,5 @@ pnpm build
 [Web应用托管_Web服务托管_Web网站托管](https://cloud.tencent.com/product/webify)
 
 ### 后端部分
-后端只是做了代理转发和redis缓存部分数据,没有啥技术含量,后期看情况凯源吧
+后端只是做了代理转发和redis缓存部分数据,没有啥技术含量,等脱敏后开源吧
 
