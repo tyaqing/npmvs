@@ -17,6 +17,11 @@
       <slot></slot>
     </div>
     <div class="text-center py-30px">
+      <a href="https://github.com/tyaqing/npmvs" target="_blank">
+        <GithubOutlined></GithubOutlined>
+        Github</a
+      >
+      |
       <a href="https://abfree.com" target="_blank">ABFree</a>
       | Npm VS | v1.0
     </div>
@@ -27,6 +32,7 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/zh-cn";
+import { GithubOutlined } from "@ant-design/icons-vue";
 
 import { useRoute } from "vue-router";
 
