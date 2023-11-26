@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  height: 100vh;
+  width: 100vw;
+  background: #F7F8FA;
+  @apply overflow-auto flex flex-col;
+}
