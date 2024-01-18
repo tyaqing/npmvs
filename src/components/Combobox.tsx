@@ -30,7 +30,7 @@ export default function MyCombobox() {
       return
     }
     const controller = new AbortController()
-    const url = `https://api.npms.io/v2/search/suggestions?q=${query}&size=6`
+    const url = encodeURIComponent(`https://www.npmjs.com/search/suggestions?q=${query}&size=6`)
 
     fetch(`/api/proxy?url=${url}`, {
       signal: controller.signal,
@@ -38,10 +38,10 @@ export default function MyCombobox() {
       .then((res) => res.json())
       .then((data) => {
         setPackageSearchResult(
-          data.map((item: { package: { name: any } }) => {
+          data.map((item: { name: any }) => {
             return {
-              id: item.package.name,
-              name: item.package.name,
+              id: item.name,
+              name: item.name,
             }
           }),
         )
