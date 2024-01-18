@@ -6,23 +6,23 @@ import DownloadTable from '@/components/DownloadTable'
 import PackageItems from '@/components/PackageItems'
 import { parseDownloadData, parseInfoData } from '@/libs/base'
 
-interface PackagesProps {
-  packageList: string[]
-  recommendPackages: string[]
-  downloadList: []
-  infoList: {
-    created_at: string
-    links: string
-    name: string
-    open_issues: string
-    stargazers_count: string
-    updated_at: string
-    version: string
-    license: {
-      name: string
-    }
-  }[]
-}
+// interface PackagesProps {
+//   packageList: string[]
+//   recommendPackages: string[]
+//   downloadList: []
+//   infoList: {
+//     created_at: string
+//     links: string
+//     name: string
+//     open_issues: string
+//     stargazers_count: string
+//     updated_at: string
+//     version: string
+//     license: {
+//       name: string
+//     }
+//   }[]
+// }
 
 export default async function Page({ params }: { params: { slug: string } }) {
   console.log('params', params)

@@ -3,7 +3,7 @@ import { Line, LineOptions } from '@antv/g2plot'
 import { useEffect, useRef } from 'react'
 
 import { flagColors } from '@/biz/const'
-import {DataItemType, thousand} from '@/libs/base'
+import { DataItemType, thousand } from '@/libs/base'
 
 interface DownloadLineChartProps {
   downloadList: DataItemType[]

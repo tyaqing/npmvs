@@ -1,7 +1,7 @@
 'use client'
 import classNames from 'classnames'
 import Link from 'next/link'
-import {useRouter,useParams} from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { HiPlus, HiX } from 'react-icons/hi'
 
 interface PackageItemsProps {
@@ -9,10 +9,9 @@ interface PackageItemsProps {
   recommend?: boolean
 }
 export default function PackageItems({ packageList = [], recommend = false }: PackageItemsProps) {
-
   const router = useRouter()
   const params = useParams()
-  const slug = params['slug'] as  string
+  const slug = params['slug'] as string
   const removePackage = (pName: string) => {
     const packageList = slug.split('-vs-')
     // 推荐组件就是增加

@@ -50,6 +50,7 @@ module.exports = {
       "component": true,
       "html": true
     }],
+    "@typescript-eslint/no-explicit-any": "off",
     "react-hooks/rules-of-hooks": "warn",
 
   },

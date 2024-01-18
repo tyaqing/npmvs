@@ -6,7 +6,7 @@ export default function Header() {
     <header className={'w-full flex justify-between'}>
       <Link as={NextLink} href={'/'}>
         <span className={'text-3xl font-bold text-indigo-500'}>npmVS</span>
-      </Link> 
+      </Link>
       <div className={'flex gap-x-6'}>
         <Link
           as={NextLink}
