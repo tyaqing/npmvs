@@ -51,7 +51,8 @@ export const parseDownloadData = async (packageList: string[], isCN = false) => 
   // 生成新的数据
   originDownloadList?.forEach((packageDownloadInfo) => {
     packageDownloadInfo.downloads?.forEach((item: DataItemType) => {
-      let { day, downloads } = item
+      let { downloads } = item
+      const day = item.day
       if (dayjs(day).day() === 0) {
         downloads += sum
         const record = {
