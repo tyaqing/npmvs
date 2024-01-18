@@ -1,9 +1,9 @@
 import Head from 'next/head'
 
-import MyCombobox from '../../components/Combobox'
-import DownloadLineChart from '../../components/DownloadLineChart'
-import DownloadTable from '../../components/DownloadTable'
-import PackageItems from '../../components/PackageItems'
+import MyCombobox from '@/components/Combobox'
+import DownloadLineChart from '@/components/DownloadLineChart'
+import DownloadTable from '@/components/DownloadTable'
+import PackageItems from '@/components/PackageItems'
 import { parseDownloadData, parseInfoData } from '@/libs/base'
 
 interface PackagesProps {
@@ -25,8 +25,8 @@ interface PackagesProps {
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  console.log('params',params)
-  const {downloadList,infoList,packages}  = await getData(params.slug.split('-vs-'))
+  console.log('params', params)
+  const { downloadList, infoList, packages } = await getData(params.slug.split('-vs-'))
 
   const title = params.slug
   return (
@@ -63,7 +63,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 }
 
 async function getData(packages: string[] = []) {
-  console.log('packages',packages)
+  console.log('packages', packages)
   const infoList = await parseInfoData(packages)
   // // 获取推荐数据
   return {
